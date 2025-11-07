@@ -56,13 +56,11 @@ public class PlayerController : MonoBehaviour {
         // apple force to the rigidbody to move the player
         rb.AddForce(movement * speed);
 
-        if (transform.position.z >= 18)
-        {
+        if (transform.position.z >= 18) {
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
         }
 
-        if (transform.position.z >= 55)
-        {
+        if (transform.position.z >= 55) {
             Destroy(GameObject.FindGameObjectWithTag("Enemy2"));
         }
 
@@ -128,8 +126,13 @@ public class PlayerController : MonoBehaviour {
             // display the win text
             winTextObject.SetActive(true);
 
-            // destroy the enemy GameObject
-            //Destroy(GameObject.FindGameObjectWithTag("Enemy"));
+            // destroy the enemy GameObjects (platform 5)
+            GameObject[] enemies4 = GameObject.FindGameObjectsWithTag("Enemy4");
+
+            foreach (GameObject e in enemies4) {
+                Destroy(e);    
+            }
+            
         }
     }
 
