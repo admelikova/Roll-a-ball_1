@@ -30,12 +30,13 @@ public class EnemyMovement3 : MonoBehaviour
     }
 
     IEnumerator WaitAtWaypoint() {
-            isWaiting = true;
-            yield return new WaitForEndOfFrame(); // Wait for the specified time
+        isWaiting = true;
+        yield return new WaitForEndOfFrame(); // Wait for the specified time
 
-            // Move to the next waypoint in the array, looping back to the start if needed
-            currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;  // 1%2=1, 2%2=0 
-            isWaiting = false;
-        }
+        // Move to the next waypoint in the array, looping back to the start if needed
+        currentPointIndex = (currentPointIndex + 1) % patrolPoints.Length;  // 1%2=1, 2%2=0 
+        isWaiting = false;
+        transform.Rotate(0, 180, 0);
+    }
 
 }
