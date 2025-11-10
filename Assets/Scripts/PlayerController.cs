@@ -3,26 +3,62 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
 using System;
+using System.Security.Cryptography;
+using UnityEngine.UIElements;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour {
     // rigidbody of the player
     private Rigidbody rb;
 
-    // variable to keep track of collect "PickUp" objects
+
+    // variables to keep track of collected "PickUp" objects and of number of lives
     private int count;
+    private int lives;
+
 
     // movement along X and Y axes
     private float movementX;
     private float movementY;
 
-    // speed at which the player moves
+
+    // speed at which the player moves (is this even used?)
     public float speed = 0;
 
-    // UI text component to display count of "PickUp" objects collected
+
+    // jump power, how high the player can jump (is this also even used?)
+    public float jumpPower = 0.5f;
+
+
+    // variables for dash mechanic
+    public float dashingPower = 50f;
+    public float dashDuration = 0.5f;
+    public float dashCooldown = 3f;
+    private bool isDashing = false;
+    private float lastDashTime;
+    private Vector3 dashDirection;
+
+
+    // UI text component to display count of "PickUp" objects collected and UI text component to display number of lives
     public TextMeshProUGUI countText;
+    public TextMeshProUGUI livesText;
+
 
     // UI object to display winning text
     public GameObject winTextObject;
+
+
+    // variables for groundchecking
+    public Transform groundCheckPos;
+    public Vector3 groundCheckSize = new Vector3(0.5f, 0.05f, 0.5f);
+    public LayerMask groundLayer;
+
+
+    // variables for audio usage
+    [SerializeField] private AudioClip bubble1;
+    private AudioSource audioSource;
+
+    // ---------------------------------- START FUNCTION -------------------------------------------------------------------------------------------------------------
 
     // Start is called once before the first frame update
     void Start() {
@@ -33,88 +69,116 @@ public class PlayerController : MonoBehaviour {
         count = 0;
         SetCountText();
 
+        //initialize lives to three and update the lives display
+        lives = 3;
+        SetLivesText();
+
         // initially set the win text to be inactive
         winTextObject.SetActive(false);
+
+        // audio
+        audioSource = GetComponent<AudioSource>();
     }
 
-    // this function is called when a move input is detected
-    void OnMove(InputValue movementValue) {
-        // convert the input value into a Vector2 for movement
-        Vector2 movementVector = movementValue.Get<Vector2>();
+    // ---------------------------------- ONMOVE FUNCTION (NOT USED) -------------------------------------------------------------------------------------------------------------
 
-        // store the X and Y components of the movement
-        movementX = movementVector.x;
-        movementY = movementVector.y;
-    }
+    /*  NOTE: this function is not being used because of changed input system behavior (send messages -> invoke unity events)
+        // this function is called when a move input is detected
+        void OnMove(InputValue movementValue)
+        {
+            // convert the input value into a Vector2 for movement
+            Vector2 movementVector = movementValue.Get<Vector2>();
+
+            // store the X and Y components of the movement
+            movementX = movementVector.x;
+            movementY = movementVector.y;
+        }
+    */
+
+    // ---------------------------------- FIXED UPDATE FUNCTION -------------------------------------------------------------------------------------------------------------------
 
     // this function is called once per fixed frame-rate frame
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
         // create a 3D movement vector using the X and Y inputs
         Vector3 movement = new Vector3(movementX, 0.0f, movementY);
 
         // apple force to the rigidbody to move the player
         rb.AddForce(movement * speed);
 
-        if (transform.position.z >= 18) {
+        // destroy enemy after leaving platform they're on
+        if (transform.position.z >= 16) {
             Destroy(GameObject.FindGameObjectWithTag("Enemy"));
         }
-
         if (transform.position.z >= 55) {
             Destroy(GameObject.FindGameObjectWithTag("Enemy2"));
         }
 
+        // respawn and update lives count
+        if (transform.position.y <= -18) {
+            transform.position = new Vector3(0, 0.345f, 0);
+            lives--;
+            SetLivesText();
+        }
+
+        // dash mechanic
+        if (isDashing) {
+            rb.AddForce(dashDirection * dashingPower); // * Time.deltaTime?
+            Debug.Log("dashingggg");
+        }
+
     }
 
-    void OnTriggerEnter(Collider other)
-    {
+    // ---------------------------------- PICKUP COLLECTING FUNCTION -------------------------------------------------------------------------------------------------------------------
+
+    void OnTriggerEnter(Collider other) {
         // check if the object the player collided with has the "PickUp" tag
-        if (other.gameObject.CompareTag("PickUp"))
-        {
+        if (other.gameObject.CompareTag("PickUp")) {
             // deactivate the collided object (make it disappear)
             other.gameObject.SetActive(false);
+
+            // play sfx
+            audioSource.clip = bubble1;
+            audioSource.Play();
 
             // increment the count of "PickUp" objects collected and update the count display
             count++;
             SetCountText();
         }
 
-        if (other.gameObject.CompareTag("PickUp (L)"))
-        {
+        // check if the object the player collided with has the "PickUp (L)" tag
+        if (other.gameObject.CompareTag("PickUp (L)")) {
+            // deactivate the collided object
             other.gameObject.SetActive(false);
 
-            //System.Random pickUpLValue = new System.Random();
-            //count += pickUpLValue.Next(2, 5);
-
+            // increment the count of "PickUp" objects collected and update the count display
             count += 2;
             SetCountText();
         }
 
+        // find door gameobjects
         GameObject[] door = GameObject.FindGameObjectsWithTag("Door1");
         GameObject door2 = GameObject.FindGameObjectWithTag("Door2");
         GameObject[] door3 = GameObject.FindGameObjectsWithTag("Door3");
 
+        // deactivate doors if enough points are collected
         if (count >= 12) {
             foreach (GameObject d in door) {
                 d.SetActive(false);
             }
         }
-
         if (count >= 72) {
             foreach (GameObject d in door3) {
                 d.SetActive(false);
                 Debug.Log("hi");
             }
         }
-
-        if (count >= 32)
-        {
+        if (count >= 32) {
             door2.SetActive(false);
         }
 
-        
-
     }
+
+    // ---------------------------------- TEXT UI UPDATE FUNCTIONS -------------------------------------------------------------------------------------------------------------------
 
     // function to update the displayed count of "PickUp" objects collected
     void SetCountText() {
@@ -130,12 +194,31 @@ public class PlayerController : MonoBehaviour {
             GameObject[] enemies4 = GameObject.FindGameObjectsWithTag("Enemy4");
 
             foreach (GameObject e in enemies4) {
-                Destroy(e);    
+                Destroy(e);
             }
-            
         }
     }
 
+    // function to update the displayed number of lives
+    void SetLivesText() {
+        // update the lives text with the current number of lives
+        livesText.text = "Lives: " + lives.ToString();
+
+        // check if the lives trigger the lose condition
+        if (lives <= 0) {
+            // destroy the current object
+            Destroy(gameObject);
+
+            // update the winText to display "You Lose!"
+            winTextObject.gameObject.SetActive(true);
+            winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
+
+        }
+    }
+
+    // ---------------------------------- ENEMY COLLISION FUNCTION -----------------------------------------------------------------------------------------------------------------
+
+    // function to handle collisions with enemies
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Enemy2") || collision.gameObject.CompareTag("Enemy3") || collision.gameObject.CompareTag("Enemy4")) {
             // destroy the current object
@@ -146,5 +229,75 @@ public class PlayerController : MonoBehaviour {
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
         }
     }
+
+    // ---------------------------------- INPUT SYSTEM FUNCTIONS ------------------------------------------------------------------------------------------------------------------
+
+    // jump function to work with spacebar key input, player jumps up
+    public void Jump(InputAction.CallbackContext context) {
+        // grounded condition check to prevent infinite jumping
+        if (isGrounded() && !PauseMenu.isPaused) {
+            // if spacebar is pressed
+            if (context.performed) {
+                // player jump
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
+            }
+        }
+    }
+
+    // new move function (previous -> OnMove()), player moves with arrow keys and WASD
+    public void Move(InputAction.CallbackContext context) {
+        if (!PauseMenu.isPaused) {
+            // read inpute from arrow keys or WASD
+            Vector2 movementVector = context.ReadValue<Vector2>();
+
+            // store the X and Y components of the movement
+            movementX = movementVector.x;
+            movementY = movementVector.y;
+        }
+    }
+
+    public void Dash(InputAction.CallbackContext context) {
+        if (!PauseMenu.isPaused) {
+            if (context.performed && !isDashing && (Time.time >= lastDashTime + dashCooldown)) {
+                StartDash();
+            }
+        }
+    }
+
+
+// ---------------------------------- JUMP HELPER FUNCTIONS -----------------------------------------------------------------------------------------------------------------
+
+    // function to check if player is grounded (touching the ground), to prevent infinite jumping
+    private bool isGrounded() {
+        // Physics.BoxCast "casts" a box downward from the player to check for collisions with objects of noted layer (groundLayer)
+        if (Physics.BoxCast(groundCheckPos.position, groundCheckSize, Vector3.down, Quaternion.identity, 0.4f, groundLayer)) {
+            return true;
+        }
+        return false;
+    }
+
+    // helper function for groundchecking
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.white;
+        Gizmos.DrawCube(groundCheckPos.position, groundCheckSize);
+    }
+
+
+// ---------------------------------- DASH HELPER FUNCTIONS -----------------------------------------------------------------------------------------------------------------
+
+    private void StartDash() {
+        isDashing = true;
+        lastDashTime = Time.time;
+
+        // determine dash direction (based on current movement direction)
+        dashDirection = transform.forward;
+        Invoke("StopDash", dashDuration);
+    }
+
+    private void StopDash() {
+        isDashing = false;
+    }
+
+
 
 }
