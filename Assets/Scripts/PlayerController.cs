@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using UnityEngine.SceneManagement;
 using System;
 using System.Security.Cryptography;
 using UnityEngine.UIElements;
@@ -11,6 +12,8 @@ public class PlayerController : MonoBehaviour {
     // rigidbody of the player
     private Rigidbody rb;
 
+    // reference to PetMovement script
+    public PetMovement pet;
 
     // variables to keep track of collected "PickUp" objects and of number of lives
     private int count;
@@ -61,6 +64,9 @@ public class PlayerController : MonoBehaviour {
     public static bool isPaused = false;
 
 
+    // portal gameobject
+    public GameObject portal;
+
     // variables for audio usage
     [SerializeField] private AudioClip bubble1;
     private AudioSource audioSource;
@@ -83,8 +89,15 @@ public class PlayerController : MonoBehaviour {
         // initially set the win text to be inactive
         winTextObject.SetActive(false);
 
-        //
+        // initially set pause menu to be inactive
         pauseMenu.SetActive(false);
+
+        // initially set portal to be inactive
+        portal.SetActive(false);
+
+        // do not destroy gameobjects when loading a new scene
+        //DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(pet.gameObject);
 
         // audio
         audioSource = GetComponent<AudioSource>();
@@ -195,7 +208,7 @@ public class PlayerController : MonoBehaviour {
 
         //check if the count has reached or exceeded the win condition
         if (count >= 114) {
-            // display the win text
+            // display the win text (go to portal)
             winTextObject.SetActive(true);
 
             // destroy the enemy GameObjects (platform 5)
@@ -204,6 +217,10 @@ public class PlayerController : MonoBehaviour {
             foreach (GameObject e in enemies4) {
                 Destroy(e);
             }
+
+            // make portal active
+            portal.SetActive(true);
+
         }
     }
 
@@ -240,6 +257,15 @@ public class PlayerController : MonoBehaviour {
             winTextObject.gameObject.SetActive(true);
             winTextObject.GetComponent<TextMeshProUGUI>().text = "You Lose!";
             */
+        }
+
+       // portal use, switching scenes and adjusting position of player and pet
+        if (collision.gameObject.CompareTag("Portal")) {
+            Debug.ClearDeveloperConsole();
+            Debug.Log("loading next scene (terrain)");
+            SceneManager.LoadSceneAsync(1);
+            //transform.position = new Vector3(500, 7.729f, 500);
+            //pet.transform.position = new Vector3(500, 7.729f, 500);
         }
     }
 

@@ -13,6 +13,7 @@ TagManager:
   - Enemy3
   - Enemy4
   - PickUp (L)
+  - Portal
   layers:
   - Default
   - TransparentFX
