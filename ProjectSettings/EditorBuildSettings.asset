@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MiniGame.unity
     guid: a5fce14cbe015004ca0c0cb3cb0af201
+  - enabled: 1
+    path: Assets/Scenes/Scene2.unity
+    guid: 8a13b79ace500444dbdf1000da30fb9a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
