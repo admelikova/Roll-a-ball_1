@@ -44,6 +44,9 @@ public class Lvl2PlayerMovement : MonoBehaviour {
     public PlayerStats playStats;
 
     public TextMeshProUGUI deathText;
+    public GameObject mazeMap;
+    private bool mapVisible = false;
+    private bool mapBought = false;
 
 
 
@@ -142,7 +145,24 @@ public class Lvl2PlayerMovement : MonoBehaviour {
 
     }
 
+// ---------------------------------- COIN COLLECTING FUNCTION -------------------------------------------------------------------------------------------------------------------
+    
+    void OnTriggerEnter(Collider other) {
+        // check if the object the player collided with has the "Coins" tag
+        if (other.gameObject.CompareTag("Coins")) {
+            // deactivate the collided object (make it disappear)
+            other.gameObject.SetActive(false);
 
+            // play sfx
+            //audioSource.clip = bubble1;
+            //audioSource.Play();
+
+            // increment the count of money collected and update the count display
+            //Debug.Log("yayy money");
+            playStats.money += 5;
+            playStats.SetMoneyText();
+        }
+    }
 
 
 // ---------------------------------- INPUT SYSTEM FUNCTIONS ------------------------------------------------------------------------------------------------------------------
@@ -182,6 +202,18 @@ public class Lvl2PlayerMovement : MonoBehaviour {
 
     public void Look(InputAction.CallbackContext context) {
         lookInput = context.ReadValue<Vector2>();
+    }
+
+    public void Map(InputAction.CallbackContext context) {
+        if (mapBought) {
+            if (!mapVisible) {
+                mazeMap.SetActive(true);
+            }
+            else {
+                mazeMap.SetActive(false);
+            }
+            mapVisible = !mapVisible;
+        }
     }
 
 

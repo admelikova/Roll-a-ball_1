@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 
 public class CoinController : MonoBehaviour
 {
-
+/*
     public Rigidbody player;
 
     public CoinSpawner coinSpawn;
@@ -53,5 +53,5 @@ public class CoinController : MonoBehaviour
             }
         }
 
-    }
+    }*/
 }

@@ -16,6 +16,8 @@ TagManager:
   - Portal
   - Maze Door
   - Coins
+  - Merchant
+  - Ghost
   layers:
   - Default
   - TransparentFX

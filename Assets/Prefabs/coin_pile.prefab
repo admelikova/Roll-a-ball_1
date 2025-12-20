@@ -62,32 +62,16 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 11ba402fff2463547a24f3a0c8990515, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 5167427002593944482}
+      addedObject: {fileID: 2105965009036598186}
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 11ba402fff2463547a24f3a0c8990515, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2105965009036598186}
+      addedObject: {fileID: 4084132431703192804}
   m_SourcePrefab: {fileID: 100100000, guid: 11ba402fff2463547a24f3a0c8990515, type: 3}
 --- !u!1 &2426745407884814566 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 11ba402fff2463547a24f3a0c8990515, type: 3}
   m_PrefabInstance: {fileID: 2426745407884848710}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &5167427002593944482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2426745407884814566}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 537abf48f6016034b93293102b72062c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  player: {fileID: 0}
-  coinSpawn: {fileID: 0}
-  playInteract: {fileID: 0}
-  interactText: {fileID: 0}
 --- !u!23 &2105965009036598186
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -136,3 +120,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4084132431703192804
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2426745407884814566}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.62908936, y: 0.4019568, z: 0.6208496}
+  m_Center: {x: -0.11392212, y: 0.19748962, z: -0.105285645}

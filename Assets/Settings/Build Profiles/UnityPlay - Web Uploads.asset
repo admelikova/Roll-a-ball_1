@@ -968,7 +968,7 @@ MonoBehaviour:
     - line: '|   qnxGraphicConfPath: '
     - line: '|   apiCompatibilityLevel: 6'
     - line: '|   captureStartupLogs: {}'
-    - line: '|   activeInputHandler: 1'
+    - line: '|   activeInputHandler: 2'
     - line: '|   windowsGamepadBackendHint: 0'
     - line: '|   cloudProjectId: 7499d901-5ddf-4b1f-b7de-97d3d3eaa9d4'
     - line: '|   framebufferDepthMemorylessMode: 0'

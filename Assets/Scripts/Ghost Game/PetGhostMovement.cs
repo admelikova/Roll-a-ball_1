@@ -3,9 +3,7 @@ using UnityEngine.AI;
 
 public class PetGhostMovement : MonoBehaviour {
     public Transform player;
-
     private NavMeshAgent navMeshAgent;
-
     private Vector3 offset;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,6 +17,5 @@ public class PetGhostMovement : MonoBehaviour {
         if (player != null) {
             navMeshAgent.SetDestination(player.position + offset);
         }
-        
     }
 }
