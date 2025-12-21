@@ -33,6 +33,10 @@ public class PlayerStats : MonoBehaviour
         healthText.text = "Health: " + health.ToString() + "%";
     }
 
+    public void BoughtMap() {
+        money -= 50;
+        SetMoneyText();
+    }
 
 
 }

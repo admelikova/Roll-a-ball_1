@@ -8,11 +8,17 @@ public class EnemyGhostMovement : MonoBehaviour {
     // reference to the NavMeshAgent component for pathfinding
     private NavMeshAgent navMeshAgent;
 
+    [SerializeField] internal AudioClip ghostsfx;
+    private AudioSource audioSourceGhost;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
         // get and store the NavMeshAgent component attached to this object
         navMeshAgent = GetComponent<NavMeshAgent>();
+
+        //audio
+        audioSourceGhost = GetComponent<AudioSource>();
+
     }
 
     // Update is called once per frame
@@ -23,4 +29,13 @@ public class EnemyGhostMovement : MonoBehaviour {
             navMeshAgent.SetDestination(player.position);
         }
     }
+
+    private void OnCollisionEnter(Collision collision) {
+        if (collision.gameObject.CompareTag("Player")) {
+            //sfx
+            audioSourceGhost.clip = ghostsfx;
+            audioSourceGhost.Play();
+        }
+    }
+
 }

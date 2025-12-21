@@ -46,7 +46,11 @@ public class Lvl2PlayerMovement : MonoBehaviour {
     public TextMeshProUGUI deathText;
     public GameObject mazeMap;
     private bool mapVisible = false;
-    private bool mapBought = false;
+    internal bool mapBought = false;
+
+
+    [SerializeField] private AudioClip coinsfx;
+    private AudioSource audioSourceCoins;
 
 
 
@@ -63,6 +67,8 @@ public class Lvl2PlayerMovement : MonoBehaviour {
 
         //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         //UnityEngine.Cursor.visible = false;
+
+        audioSourceCoins = GetComponent<AudioSource>();
 
     }
 
@@ -154,8 +160,8 @@ public class Lvl2PlayerMovement : MonoBehaviour {
             other.gameObject.SetActive(false);
 
             // play sfx
-            //audioSource.clip = bubble1;
-            //audioSource.Play();
+            audioSourceCoins.clip = coinsfx;
+            audioSourceCoins.Play();
 
             // increment the count of money collected and update the count display
             //Debug.Log("yayy money");
