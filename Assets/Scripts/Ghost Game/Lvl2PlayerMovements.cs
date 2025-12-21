@@ -44,6 +44,7 @@ public class Lvl2PlayerMovement : MonoBehaviour {
     public PlayerStats playStats;
 
     public TextMeshProUGUI deathText;
+    public TextMeshProUGUI winText;
     public GameObject mazeMap;
     private bool mapVisible = false;
     internal bool mapBought = false;
@@ -64,6 +65,7 @@ public class Lvl2PlayerMovement : MonoBehaviour {
         lookAction = pi.currentActionMap.FindAction("Look");
 
         deathText.enabled = false;
+        winText.enabled = false;
 
         //UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         //UnityEngine.Cursor.visible = false;
@@ -168,6 +170,17 @@ public class Lvl2PlayerMovement : MonoBehaviour {
             playStats.money += 5;
             playStats.SetMoneyText();
         }
+
+        // check if the object the player collided with has the "Secret" tag
+        if (other.gameObject.CompareTag("Secret")) {
+            // deactivate the collided object (make it disappear)
+            other.gameObject.SetActive(false);
+
+            // display win text
+            winText.enabled = true;
+            Time.timeScale = 0f;
+        }
+
     }
 
 

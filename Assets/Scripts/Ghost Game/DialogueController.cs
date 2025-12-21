@@ -2,6 +2,8 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class DialogueController : MonoBehaviour
 {
@@ -31,8 +33,6 @@ public class DialogueController : MonoBehaviour
     void Start() {
         textComponent.text = string.Empty;
         StartDialogue();
-        yesButton.SetActive(false);
-        noButton.SetActive(false);
     }
 
     // Update is called once per frame
@@ -65,10 +65,6 @@ public class DialogueController : MonoBehaviour
                     break;
                 default:
                     StartCoroutine(TypeLine(lines3));
-                    if (index == 0) {
-                        yesButton.SetActive(true);
-                        noButton.SetActive(true);
-                    }
                     break;
             }
         }
@@ -78,10 +74,12 @@ public class DialogueController : MonoBehaviour
     }
 
     IEnumerator TypeLine(string[] lines) {
-        foreach (char c in lines[index].ToCharArray()) {
-            textComponent.text += c;
-            yield return new WaitForSeconds(textSpeed);
-        }
+        if (!(merchantInteraction == 2 && index == 4 && playerMove.mapBought)) {
+            foreach (char c in lines[index].ToCharArray()) {
+                textComponent.text += c;
+                yield return new WaitForSeconds(textSpeed);
+            }
+        }  
     }
 
     void NextLine(string[] lines) {
@@ -105,41 +103,25 @@ public class DialogueController : MonoBehaviour
         if (index < lines.Length - 1) {
             switch (index) {
                 case 0:
-                    if (buyMap) {
-                        index++;
-                    }
-                    else {
-                        index = 3;
-                    }
-                    break;
-                //yes
-                case 1:
                     if (playStats.money >= 50) {
                         playStats.BoughtMap();
                         playerMove.mapBought = true;
-                        index = 2;
+                        index = 1;
                     }
                     else {
-                        index = 7;
+                        index = 4;
                     }
                     break;
+                case 1:
+                    index = 2;
+                    break;
                 case 2:
-                    index = 4;
+                    index = 3;
                     break;
-                case 4:
-                    index = 5;
-                    break;
-                //no
                 case 3:
-                    index = 6;
+                index = 4;
                     break;
-                case 6:
-                    index = 5;
-                    break;
-                case 5:
-                    index = 8;
-                    //ReadLines_Lines3(lines3);
-                    //NextLine(lines3);
+                default:
                     break;
             }
 
@@ -168,26 +150,30 @@ public class DialogueController : MonoBehaviour
     }
 
     void ReadLines_Lines3(string[] lines) {
-        if (textComponent.text == lines[index] && index != 5) {
+        if (textComponent.text == lines[index]) {
             NextLine_Lines3(lines);
         }
         else {
             StopAllCoroutines();
             textComponent.text = lines[index];
+            gameObject.SetActive(false);
+
         }
     }
 
-    public void BuyMap() {    
+   /* public void BuyMap() {    
         buyMap = true;
-
+        Debug.Log("bought map");
         yesButton.SetActive(false);
         noButton.SetActive(false);
     }
 
     public void NoBuyMap() {
         buyMap = false;
-        
+        Debug.Log("no bought map");
+
         yesButton.SetActive(false);
         noButton.SetActive(false);
     }
+    */
 }

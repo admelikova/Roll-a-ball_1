@@ -1,8 +1,10 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class PlayerStats : MonoBehaviour
 {
+    public GameObject player;
     public TextMeshProUGUI moneyText;
     public TextMeshProUGUI healthText;
     //public TextMeshProUGUI interactText;
@@ -15,12 +17,17 @@ public class PlayerStats : MonoBehaviour
     {
         SetMoneyText();
         SetHealthText();
+        if (player != null) {
+            StartCoroutine(IncreaseHealth());
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (player == null) {
+            StopAllCoroutines();
+        }
     }
 
     public void SetMoneyText() {
@@ -38,5 +45,15 @@ public class PlayerStats : MonoBehaviour
         SetMoneyText();
     }
 
+    IEnumerator IncreaseHealth() {
+        while (true) {
+            Debug.Log("upping health");
+            yield return new WaitForSecondsRealtime(2.5f);
+            if (health < 100) {
+                health++;
+                SetHealthText();
+            }
+        }    
+    }
 
 }

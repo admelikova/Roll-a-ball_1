@@ -26,10 +26,10 @@ public class Interactor : MonoBehaviour
             if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj)) {
                 if (hitInfo.collider.gameObject.CompareTag("Merchant")) {
                     who = 1;
-                    Debug.Log("who = 1");
+                    //Debug.Log("who = 1");
                 }
                 else {
-                    Debug.Log("who = 2");
+                    //Debug.Log("who = 2");
                     who = 2;
                 }
                 interactObj.Interact();
