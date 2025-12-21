@@ -2869,12 +2869,12 @@ MonoBehaviour:
   - <b>Jessie:</b> Where is he?
   - <b>Merchant:</b> Right by the maze entrance, last time I've seen him.
   - <b>Merchant:</b> Besides that fellow, I can help you by selling you various items.
-  - <b>Merchant:</b> I have flashlight batteries and a maze map.
+  - <b>Merchant:</b> Currently I have a maze map available for sale.
   - <b>Jessie:</b> You've mentioned a maze and now a maze map...?
   - <b>Merchant:</b> That's because in order to find the mysterious object, you'll
     need to go through that maze that's out there close to my shop.
   - <b>Merchant:</b> You can go into it blind, but good luck finding your way out
-    like that. That's why I have the map.
+    like that. That's why I have the map for $50.
   - '<b>Jessie:</b> Oh that makes sense. '
   - <b>Jessie:</b> Anyway, thank you very much for your help.
   - <b>Merchant:</b> You're very welcome. Be sure to find enough <b>coins throughout
@@ -6700,7 +6700,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.32
-  m_Speed: 8
+  m_Speed: 9.5
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
